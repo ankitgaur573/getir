@@ -9,6 +9,6 @@ structure
 >MiddleWare Validate Request</br>
 
 To Start<br> 
-.create .env file on the project directory and create a variable and assign it your mongodb url<br>
+.create .env file on the project directory and put values of PORT and MONGO_URL<br>
 .npm install to install packages<br>
 .npm start to start your server<br>
