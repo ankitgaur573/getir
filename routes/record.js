@@ -7,34 +7,12 @@ router.post('/', async (req,res)=>{
 
         let {startDate, endDate, minCount, maxCount} = req.body;
 
-        const records = await recordModel.aggregate([
-            {$match: 
-                {createdAt: {
-                    $gte: new Date(startDate),
-                    $lt: new Date(endDate) 
-                }}},
-            {
-                $addFields: {
-                  totalCount: {
-                    $sum: "$counts"
-                  }
-                }
-              },
-              {
-                $match: {
-                  totalCount: {
-                    $gte: minCount,
-                    $lte: maxCount
-                  }
-                }
-              },
-              { $unset: [ "_id", "counts", "value" ] }
-        ]);
+        let filteredRecords = await recordModel.filterByDateAndCount(startDate, endDate, minCount, maxCount);
 
-        res.send({code: 0, msg: "Success", records: records})
+        res.send({code: 0, msg: "Success", records: filteredRecords})
 
-    } catch (error) {
-        console.log("Error in division create ", error);
+    } catch(error) {
+        console.log("Error getting filtered records ", error);
         res.status(500).json({code: 2, msg : "Something went wrong"})
     }
 });
